@@ -73,7 +73,7 @@ You should now have a project with a pom that looks something like this:
 Right now, there are no services in this app, so if you were to run it and navigate to http://localhost:8080, you 
 would only get a 404 page. So let's add a controller called `no.kantega.springandreact.HelloController`: 
 
-```
+```java
 package no.kantega.springandreact;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,7 +93,7 @@ public class HelloController {
 Now, let's run the application and try it out: 
 
 In one command line window, start the application with 
-```bash
+```
 $ mvn spring-boot:run 
 
 [...]
@@ -197,7 +197,7 @@ development. In a test or production environment, we will solve this in a differ
 Make sure you have the backend running, and restart the frontend. You should now be able to fetch
 the hello service through the frontend server at http://localhost:3000/api/hello
 
-```bash
+```
 $ curl http://localhost:3000/api/hello
 Hello, the time at the server is now Wed Apr 11 10:04:47 CEST 2018
 ```
@@ -275,49 +275,46 @@ the frontend and the backend.
 
 ## Run npm from maven
 Add the following to `pom.xml` under `/build/plugins`:  
-```
-
-
-    <plugin>
-
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.6</version>
-                <configuration>
-                    <workingDirectory>frontend</workingDirectory>
-                    <installDirectory>target</installDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>install node and npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                            <nodeVersion>v8.9.4</nodeVersion>
-                            <npmVersion>5.6.0</npmVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm install</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm run build</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+```xml
+<plugin>
+    <groupId>com.github.eirslett</groupId>
+    <artifactId>frontend-maven-plugin</artifactId>
+    <version>1.6</version>
+    <configuration>
+        <workingDirectory>frontend</workingDirectory>
+        <installDirectory>target</installDirectory>
+    </configuration>
+    <executions>
+        <execution>
+            <id>install node and npm</id>
+            <goals>
+                <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+                <nodeVersion>v8.9.4</nodeVersion>
+                <npmVersion>5.6.0</npmVersion>
+            </configuration>
+        </execution>
+        <execution>
+            <id>npm install</id>
+            <goals>
+                <goal>npm</goal>
+            </goals>
+            <configuration>
+                <arguments>install</arguments>
+            </configuration>
+        </execution>
+        <execution>
+            <id>npm run build</id>
+            <goals>
+                <goal>npm</goal>
+            </goals>
+            <configuration>
+                <arguments>run build</arguments>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
 ```
 
 When you run `mvn clean install`, maven will install npm and node locally and run `npm build`
@@ -352,7 +349,7 @@ $ mvn clean install
 This results in a production build of the frontend in `frontend/build`: 
 
 ```
-tree frontend/build
+$ tree frontend/build
 frontend/build
 ├── asset-manifest.json
 ├── favicon.ico
@@ -377,25 +374,25 @@ from the Spring Boot application. We'll use the ant plugin for this.
 
 Add the following to `pom.xml` under `/build/plugins`: 
 
-```
+```xml
 <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <tasks>
-                                <copy todir="${project.build.directory}/classes/public">
-                                    <fileset dir="${project.basedir}/frontend/build"/>
-                                </copy>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+    <artifactId>maven-antrun-plugin</artifactId>
+    <executions>
+        <execution>
+            <phase>generate-resources</phase>
+            <configuration>
+                <tasks>
+                    <copy todir="${project.build.directory}/classes/public">
+                        <fileset dir="${project.basedir}/frontend/build"/>
+                    </copy>
+                </tasks>
+            </configuration>
+            <goals>
+                <goal>run</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
 ``` 
 
 This will ensure that the frontend build files are copied after they have been generated by `npm build`.
