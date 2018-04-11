@@ -131,7 +131,7 @@ This section uses the tool [npx](https://medium.com/@maybekatz/introducing-npx-a
 which is included with newer versions of `npm`. 
 
 ```
-npx create-react-app frontend
+$ npx create-react-app frontend
 
 Creating a new React app in /Users/oven/git/react-and-spring/frontend.
 
@@ -227,22 +227,19 @@ import './App.css';
 
 class App extends Component {
 
-    getHello = () => {
+    state = {};
+
+    componentDidMount() {
+        setInterval(this.hello, 250);
+    }
+
+    hello = () => {
         fetch('/api/hello')
             .then(response => response.text())
             .then(message => {
                 this.setState({message: message});
             });
     };
-
-    constructor() {
-        super();
-        this.state = {};
-    }
-
-    componentDidMount() {
-        setInterval(this.getHello, 250);
-    }
 
     render() {
         return (
@@ -260,7 +257,6 @@ class App extends Component {
 }
 
 export default App;
-
 ```
 
 The frontend should now display the current time at the server: 
