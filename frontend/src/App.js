@@ -4,22 +4,19 @@ import './App.css';
 
 class App extends Component {
 
-    getHello = () => {
+    state = {};
+
+    componentDidMount() {
+        setInterval(this.hello, 250);
+    }
+
+    hello = () => {
         fetch('/api/hello')
             .then(response => response.text())
             .then(message => {
                 this.setState({message: message});
             });
     };
-
-    constructor() {
-        super();
-        this.state = {};
-    }
-
-    componentDidMount() {
-        setInterval(this.getHello, 250);
-    }
 
     render() {
         return (

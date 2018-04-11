@@ -116,7 +116,7 @@ $ mvn spring-boot:run
 2018-04-11 09:35:49.853  INFO 88567 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 15 ms
 ```
 
-Then, in another window, fetch `http://localhost:8080/api/hello` with curl: 
+Then, in another window, fetch http://localhost:8080/api/hello with curl or your web browser: 
 
 ```
 $ curl http://localhost:8080/api/hello
@@ -126,6 +126,10 @@ Hello, the time at the server is now Wed Apr 11 09:38:19 CEST 2018
 That's great, we now have a rest service in Spring Boot up and running!
 
 ## Adding React
+
+This section uses the tool [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b), 
+which is included with newer versions of `npm`. 
+
 ```
 npx create-react-app frontend
 
