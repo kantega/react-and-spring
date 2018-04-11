@@ -1,14 +1,26 @@
 Webapp with Create React App and Spring Boot
 ===
 
-### Goal:
+Developing Spring applications with Spring Boot is a real time saver. It gets you up and running quickly, and 
+continues to make your life easier as you move to production and start releasing incremental updates to your
+application. 
+
+Create React App does the same thing for your React frontend. It speeds up the initial phase by stitching together
+everything you need to get your React frontend working with minimal effort on your part, and it shortens your feedback
+loop by enabling hot reload. That way, you can just save your files, and changes will be immediately visible in 
+the browser. 
+
+This tutorial shows you how to combine Create React App with Spring Boot, giving you one single jar file to deploy.
+
+## Goal:
  - Easily deploy to test and production environments
  - Frontend and backend in a single jar
  - Keep the benefits using the Create React App environment including:
     - Hot reload
     - Built in ES6 to ES5 transpiler
+    - Optimized production build
 
-
+## Getting started
 First, create a spring boot project with https://start.spring.io. Add the `Web` dependency. Set the groupId and
 artifactId to whatever you want. In this example we chose `no.kantega` and `spring-and-react`. 
 
@@ -113,8 +125,7 @@ Hello, the time at the server is now Wed Apr 11 09:38:19 CEST 2018
 
 That's great, we now have a rest service in Spring Boot up and running!
 
-Adding React
-===
+## Adding React
 ```
 npx create-react-app frontend
 
@@ -154,8 +165,7 @@ This will open a web browser on your desktop, and it should display something li
 
 ![A React app](react-app.png)
 
-Calling rest services in spring from React
-===
+## Calling rest services in spring from React
 Now we have a backend server in Spring Boot running at http://localhost:8080 and a frontend frontend in
 React running at http://localhost:3000. We'd like to be able to call services in the backend and
 display the results in the frontend. In order to do this (and not get into trouble with any
@@ -257,8 +267,7 @@ The frontend should now display the current time at the server:
 Success! We now have a React frontend that talks to our Spring Boot backend. But how do we deploy
 this to production? 
 
-Packaging the React app with Spring Boot
-===
+## Packaging the React app with Spring Boot
 We'd like to be able to publish *one* jar file to production, and that jar file should
 contain both the backend and the frontend. Spring Boot applications can serve static content if you put
 it into the `classes/public` directory of the application jar file. Create React App can build a 
@@ -273,7 +282,7 @@ We'll use `frontend-maven-plugin` in step 1, and `maven-antrun-plugin` in step 2
 we can just type `$ mvn clean install` and we'll end up with a single jar file containing both
 the frontend and the backend. 
 
-## Run npm from maven
+### Run npm from maven
 Add the following to `pom.xml` under `/build/plugins`:  
 ```xml
 <plugin>
@@ -369,6 +378,7 @@ frontend/build
 4 directories, 10 files
 ```
 
+### Include frontend build files in spring boot jar
 We now have to copy these files to `target/classes/public` in order to serve them as static resources
 from the Spring Boot application. We'll use the ant plugin for this. 
 
@@ -490,7 +500,7 @@ Open your web browser, and navigate to http://localhost:8080. You should now see
 
 ![spring boot with react](finished.png)
 
-Congratulations!
+## Congratulations!
 
 You now have a spring boot application with a React frontend. During development, you can now run the application
 using `React-scripts` by running `cd frontend; npm start`, and you'll have all the benefits of rapid application 
