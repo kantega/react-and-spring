@@ -116,32 +116,32 @@ That's great, we now have a rest service in Spring Boot up and running!
 Adding React
 ===
 ```
-npx create-react-app client
+npx create-react-app frontend
 
-Creating a new React app in /Users/oven/git/react-and-spring/client.
+Creating a new React app in /Users/oven/git/react-and-spring/frontend.
 
 Installing packages. This might take a couple of minutes.
 Installing react, react-dom, and react-scripts...
 [...]
-Success! Created client at /Users/oven/git/react-and-spring/client
+Success! Created frontend at /Users/oven/git/react-and-spring/frontend
 [...]
 We suggest that you begin by typing:
 
-  cd client
+  cd frontend
   npm start
 ```
 
 OK, let's do that, then :) 
 
 ```
-$ cd client
+$ cd frontend
 $ npm start
 
 [...] 
 
 Compiled successfully!
 
-You can now view client in the browser.
+You can now view frontend in the browser.
 
   Local:            http://localhost:3000/
   On Your Network:  http://172.16.25.84:3000/
@@ -156,22 +156,22 @@ This will open a web browser on your desktop, and it should display something li
 
 Calling rest services in spring from React
 ===
-Now we have a backend server in Spring Boot running at http://localhost:8080 and a frontend client in
+Now we have a backend server in Spring Boot running at http://localhost:8080 and a frontend frontend in
 React running at http://localhost:3000. We'd like to be able to call services in the backend and
 display the results in the frontend. In order to do this (and not get into trouble with any
 cross-origin requests (CORS)) we ask the frontend server to proxy any requests from `:3000` to `:8080`. 
 
 According to the
 [documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#configuring-the-proxy-manually)
-you have to add a `proxy` entry to `client/package.json`. This will ensure that the web server at :3000 proxies 
+you have to add a `proxy` entry to `frontend/package.json`. This will ensure that the web server at :3000 proxies 
 any requests to `http://localhost:3000/api/*` to `http://localhost:8080/api`, which will enable us
 to call the backend without running into any CORS issues. Note that this is only useful during
 development. In a test or production environment, we will solve this in a different way. Read on :)
 
-`client/package.json` 
+`frontend/package.json` 
 ```json
 {
-  "name": "client",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -204,7 +204,7 @@ Hello, the time at the server is now Wed Apr 11 10:04:47 CEST 2018
 
 Next, let's add a rest call to the frontend: 
 
-Open `client/src/App.js` and replace its contents with this: 
+Open `frontend/src/App.js` and replace its contents with this: 
 
 ```javascript
 import React, {Component} from 'react';
@@ -251,7 +251,7 @@ export default App;
 
 The frontend should now display the current time at the server: 
 
-![frontend with backend attached](client.png)
+![frontend with backend attached](frontend.png)
 
 
 Success! We now have a React frontend that talks to our Spring Boot backend. But how do we deploy
@@ -262,7 +262,7 @@ Packaging the React app with Spring Boot
 We'd like to be able to publish *one* jar file to production, and that jar file should
 contain both the backend and the frontend. Spring Boot applications can serve static content if you put
 it into the `classes/public` directory of the application jar file. Create React App can build a 
-static bundle for production by running `npm build` in the client directory.
+static bundle for production by running `npm build` in the frontend directory.
 
 To accomplish this, we have to do the following: 
  
@@ -284,7 +284,7 @@ Add the following to `pom.xml` under `/build/plugins`:
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.6</version>
                 <configuration>
-                    <workingDirectory>client</workingDirectory>
+                    <workingDirectory>frontend</workingDirectory>
                     <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>
@@ -321,7 +321,7 @@ Add the following to `pom.xml` under `/build/plugins`:
 ```
 
 When you run `mvn clean install`, maven will install npm and node locally and run `npm build`
-in the `client` directory. 
+in the `frontend` directory. 
 
 ```
 $ mvn clean install
@@ -333,15 +333,15 @@ $ mvn clean install
 [INFO] Installed npm locally.
 [INFO]
 [INFO] --- frontend-maven-plugin:1.6:npm (npm install) @ spring-and-react ---
-[INFO] Running 'npm install' in /Users/oven/git/react-and-spring/client
+[INFO] Running 'npm install' in /Users/oven/git/react-and-spring/frontend
 [WARNING] npm WARN ajv-keywords@3.1.0 requires a peer of ajv@^6.0.0 but none is installed. You must install peer dependencies yourself.
 [ERROR]
 [INFO] up to date in 7.23s
 [INFO]
 [INFO] --- frontend-maven-plugin:1.6:npm (npm run build) @ spring-and-react ---
-[INFO] Running 'npm run build' in /Users/oven/git/react-and-spring/client
+[INFO] Running 'npm run build' in /Users/oven/git/react-and-spring/frontend
 [INFO]
-[INFO] > client@0.1.0 build /Users/oven/git/react-and-spring/client
+[INFO] > frontend@0.1.0 build /Users/oven/git/react-and-spring/frontend
 [INFO] > react-scripts build
 [INFO]
 [INFO] Creating an optimized production build...
@@ -349,11 +349,11 @@ $ mvn clean install
 [...]
 ```
 
-This results in a production build of the frontend in `client/build`: 
+This results in a production build of the frontend in `frontend/build`: 
 
 ```
-tree client/build
-client/build
+tree frontend/build
+frontend/build
 ├── asset-manifest.json
 ├── favicon.ico
 ├── index.html
@@ -386,7 +386,7 @@ Add the following to `pom.xml` under `/build/plugins`:
                         <configuration>
                             <tasks>
                                 <copy todir="${project.build.directory}/classes/public">
-                                    <fileset dir="${project.basedir}/client/build"/>
+                                    <fileset dir="${project.basedir}/frontend/build"/>
                                 </copy>
                             </tasks>
                         </configuration>
@@ -496,7 +496,7 @@ Open your web browser, and navigate to http://localhost:8080. You should now see
 Congratulations!
 
 You now have a spring boot application with a React frontend. During development, you can now run the application
-using `React-scripts` by running `cd client; npm start`, and you'll have all the benefits of rapid application 
+using `React-scripts` by running `cd frontend; npm start`, and you'll have all the benefits of rapid application 
 development with hot reloads and everything you might wish for, while being able to deploy the application to test
 and production environments as a single artifact. 
 
