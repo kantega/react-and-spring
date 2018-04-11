@@ -385,17 +385,17 @@ from the Spring Boot application. We'll use the ant plugin for this.
 Add the following to `pom.xml` under `/build/plugins`: 
 
 ```xml
-<plugin>
+ <plugin>
     <artifactId>maven-antrun-plugin</artifactId>
     <executions>
         <execution>
             <phase>generate-resources</phase>
             <configuration>
-                <tasks>
+                <target>
                     <copy todir="${project.build.directory}/classes/public">
                         <fileset dir="${project.basedir}/frontend/build"/>
                     </copy>
-                </tasks>
+                </target>
             </configuration>
             <goals>
                 <goal>run</goal>
