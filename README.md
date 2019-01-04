@@ -176,7 +176,7 @@ display the results in the frontend. In order to do this (and not get into troub
 cross-origin requests (CORS)) we ask the frontend server to proxy any requests from `:3000` to `:8080`. 
 
 According to the
-[documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#configuring-the-proxy-manually)
+[documentation](https://facebook.github.io/create-react-app/docs/proxying-api-requests-in-development#configuring-the-proxy-manually)
 you have to add a `proxy` entry to `frontend/package.json`. This will ensure that the web server at :3000 proxies 
 any requests to `http://localhost:3000/api/*` to `http://localhost:8080/api`, which will enable us
 to call the backend without running into any CORS issues. Note that this is only useful during
@@ -199,12 +199,7 @@ development. In a test or production environment, we will solve this in a differ
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": {
-    "/api": {
-      "target": "http://localhost:8080",
-      "ws": true
-    }
-  }
+  "proxy": "http://localhost:8080"
 }
 ```
 
