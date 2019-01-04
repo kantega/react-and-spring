@@ -207,6 +207,31 @@ development. In a test or production environment, we will solve this in a differ
   }
 }
 ```
+If you meet the following error on create-react-app v2
+```
+When specified, "proxy" in package.json must be a string.
+Instead, the type of "proxy" was "object".
+Either remove "proxy" from package.json, or make it a string.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+``` 
+
+First, install 'http-proxy-middleware'
+```
+$ npm install http-proxy-middleware --save
+$ # or
+$ yarn add http-proxy-middleware
+```
+Next, create 'src/setupProxy.js' with following contents
+```
+const proxy = require('http-proxy-middleware')
+
+module.exports = function(app) {
+    app.use(proxy('/api', { target: 'http://localhost:8080/' }))
+}
+```
+Lastly, remove "proxy' configuration from package.json & restart with 'npm start'
+
 
 Make sure you have the backend running, and restart the frontend. You should now be able to fetch
 the hello service through the frontend server at http://localhost:3000/api/hello
