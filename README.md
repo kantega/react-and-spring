@@ -170,7 +170,7 @@ This will open a web browser on your desktop, and it should display something li
 ![A React app](react-app.png)
 
 ## Calling rest services in spring from React
-Now we have a backend server in Spring Boot running at http://localhost:8080 and a frontend frontend in
+Now we have a backend server in Spring Boot running at http://localhost:8080 and a frontend in
 React running at http://localhost:3000. We'd like to be able to call services in the backend and
 display the results in the frontend. In order to do this (and not get into trouble with any
 cross-origin requests (CORS)) we ask the frontend server to proxy any requests from `:3000` to `:8080`. 
