@@ -189,9 +189,9 @@ development. In a test or production environment, we will solve this in a differ
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "react-scripts": "1.1.4"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "^3.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -199,8 +199,21 @@ development. In a test or production environment, we will solve this in a differ
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "http://localhost:8080",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
+
 ```
 
 Make sure you have the backend running, and restart the frontend. You should now be able to fetch
@@ -216,39 +229,31 @@ Next, let's add a rest call to the frontend:
 Open `frontend/src/App.js` and replace its contents with this: 
 
 ```javascript
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+function App () {
+    const [message, setMessage] = useState("");
 
-    state = {};
-
-    componentDidMount() {
-        setInterval(this.hello, 250);
-    }
-
-    hello = () => {
+    useEffect(() => {
         fetch('/api/hello')
             .then(response => response.text())
             .then(message => {
-                this.setState({message: message});
+                setMessage(message);
             });
-    };
-
-    render() {
-        return (
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <h1 className="App-title">{this.state.message}</h1>
-                </header>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.js</code> and save to reload.
-                </p>
-            </div>
-        );
-    }
+    },[])
+    return (
+        <div className="App">
+            <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo"/>
+            <h1 className="App-title">{message}</h1>
+            </header>
+            <p className="App-intro">
+                To get started, edit <code>src/App.js</code> and save to reload.
+            </p>
+        </div>
+    )
 }
 
 export default App;
